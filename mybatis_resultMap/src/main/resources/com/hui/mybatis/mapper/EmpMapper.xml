@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.mybatis.mapper.EmpMapper">
+
+    <resultMap id="empResultMap" type="Emp">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+    </resultMap>
+
+    <resultMap id="empDeptMap1" type="Emp">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <result column="dept_id" property="dept.deptId"/>
+        <result column="dept_name" property="dept.deptName"/>
+    </resultMap>
+
+    <resultMap id="empDeptMap" type="Emp">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <association property="dept" javaType="Dept">
+            <id column="dept_id" property="deptId"/>
+            <result column="dept_name" property="deptName"/>
+        </association>
+    </resultMap>
+
+    <!--Emp getEmpAndDeptById(@Param("empId") Integer empId);-->
+
+    <select id="getEmpAndDeptById" resultMap="empDeptMap">
+        select emp.*,td.* from t_emp emp left join t_dept td on emp.dept_id = td.dept_id where emp.emp_id = #{empId}
+    </select>
+
+    <select id="getEmpByEmpId" resultMap="empResultMap">
+        select * from t_emp where emp_id = #{empId}
+    </select>
+
+    <!--Emp getEmpByEmpId(@Param("empId") Integer empId);-->
+    <select id="getEmpByEmpIdOld" resultType="Emp">
+        select * from t_emp where emp_id = #{empId}
+    </select>
+
+
+    <resultMap id="empDeptStepMap" type="Emp">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <!--fetchType = "eager(立即加载)|lazy(延迟加载)"-->
+        <association property="dept" fetchType="lazy"
+        select="com.hui.mybatis.mapper.DeptMapper.getEmpDeptByStep"
+        column="dept_id">
+        </association>
+
+
+    </resultMap>
+
+    <!--Emp getEmpByStep(@Param("empId") Integer empId);-->
+    <select id="getEmpByStep" resultMap="empDeptStepMap">
+        select * from t_emp where emp_id = #{empId}
+    </select>
+
+    <!--List<Emp> getDeptAndEmpByStepTwo(@Param("deptId") Integer deptId);-->
+    <select id="getDeptAndEmpByStepTwo" resultType="emp">
+        select * from t_emp where dept_id = #{deptId}
+    </select>
+
+</mapper>

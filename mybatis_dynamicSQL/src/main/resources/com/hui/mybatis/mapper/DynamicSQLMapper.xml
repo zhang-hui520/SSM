@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.mybatis.mapper.CacheMapper">
+
+
+    <!--List<Emp> getEmpByCondition(Emp emp);-->
+
+    <!--
+        动态SQL:
+        1、if，通过test属性中的表达式判断标签中的内容是否有效（是否会拼接到SQL中）
+        2、where
+            a、若where标签中有条件成立，会自动生成where关键字
+            b、会自动将where标签中内容前多余的and去掉
+            c、若where标签中没有任何一个条件成立，则where没有任何功能
+        3、trim
+            a、prefix、suffix：在标签中内容前面或后面添加指定内容
+            b、prefixOverrides、suffixOverrides：在标签内容前面或后面去掉指定内容
+    -->
+
+    <sql id="empColumns">
+        emp_id,emp_name,age,gender,dept_id
+    </sql>
+
+    <select id="getEmpByCondition" resultType="Emp">
+        select <include refid="empColumns"/> from t_emp
+        <where>
+            <if test="empName != null and empName != ''">
+                emp_name = #{empName}
+            </if>
+            <if test="age != null and age != ''">
+                and age = #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+        </where>
+
+    </select>
+
+    <!--void insertMoreEmp(List<Emp> emps);-->
+    <insert id="insertMoreEmp">
+        insert into t_emp values
+        <foreach collection="emps" item="emp" separator=",">
+            (null,#{emp.empName},#{emp.age},#{emp.gender},null)
+        </foreach>
+    </insert>
+
+</mapper>
