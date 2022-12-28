@@ -11,6 +11,5 @@ public class TestIOC {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
         HelloWorld helloworld = (HelloWorld) ac.getBean("helloworld");
         helloworld.sayHello();
-
     }
 }

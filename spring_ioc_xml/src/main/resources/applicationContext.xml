@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="studentOne" class="com.hui.spring.pojo.Student">
+        <property name="sid" value="1001"/>
+        <property name="sname" value="张三"/>
+        <property name="age" value= "23"/>
+        <property name="gender" value="男"/>
+
+    </bean>
+
+    <bean id="studentFive" class="com.hui.spring.pojo.Student">
+        <property name="sid" value="1002"/>
+        <property name="sname" value="李四"/>
+        <property name="age" value= "27"/>
+        <property name="gender" value="男"/>
+        <!--<property name="clazz" ref="clazzOne"/>-->
+        <property name="clazz">
+            <bean class="com.hui.spring.pojo.Clazz">
+                <property name="cid" value="2222"/>
+                <property name="cname" value="沙雕景区班"/>
+            </bean>
+        </property>
+        <property name="hobbies">
+            <array>
+                <value>抽烟</value>
+                <value>喝酒</value>
+                <value>烫头</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="clazzOne" class="com.hui.spring.pojo.Clazz">
+        <property name="cid" value="1111"/>
+        <property name="cname" value="最强王者班"/>
+    </bean>
+
+    <bean id="clazzTwo" class="com.hui.spring.pojo.Clazz">
+        <property name="cid" value="2222"/>
+        <property name="cname" value="菜鸡班"/>
+        <property name="students">
+            <list>
+                <ref bean="studentOne"/>
+                <ref bean="studentFive"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="teacherOne" class="com.hui.spring.pojo.Teacher">
+        <property name="teacherId" value="10010"/>
+        <property name="teacherName" value="大宝"/>
+    </bean>
+
+    <bean id="teacherTwo" class="com.hui.spring.pojo.Teacher">
+        <property name="teacherId" value="10086"/>
+        <property name="teacherName" value="二宝"/>
+    </bean>
+
+    <bean id="studentTwo" class="com.hui.spring.pojo.Student">
+        <property name="sid" value="1003"/>
+        <property name="sname" value="赵六"/>
+        <property name="age" value="21"/>
+        <property name="gender" value="男"/>
+        <property name="clazz" ref="clazzOne"/>
+        <property name="hobbies">
+            <array>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+            </array>
+        </property>
+        <!--<property name="teacherMap">-->
+        <!--    <map>-->
+        <!--        <entry value-ref="teacherOne" key="10010"/>-->
+        <!--        <entry value-ref="teacherTwo" key="10086"/>-->
+        <!--    </map>-->
+        <!--</property>-->
+        <property name="teacherMap" ref="teacherMap"/>
+
+    </bean>
+
+    <util:map id="teacherMap">
+        <entry key="10086" value-ref="teacherOne"/>
+        <entry key="10010" value-ref="teacherTwo"/>
+    </util:map>
+
+</beans>
